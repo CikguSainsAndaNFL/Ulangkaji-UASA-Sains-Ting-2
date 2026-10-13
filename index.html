@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Misi Sains Tingkatan 2</title>
+<style>
+:root{--navy:#183153;--blue:#2864dc;--sky:#eaf2ff;--yellow:#ffd166;--green:#16845b;--red:#c53b48;--ink:#1d2939;--muted:#667085}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#e9f4ff,#fff7df);color:var(--ink)}
+.wrap{max-width:850px;margin:0 auto;padding:18px}.hero{background:var(--navy);color:white;border-radius:22px;padding:24px;text-align:center;box-shadow:0 8px 24px #18315320}
+.hero .emoji{font-size:42px}.hero h1{margin:8px 0;font-size:clamp(25px,5vw,36px)}.hero p{margin:6px 0;color:#e1eaff}
+.card{background:white;border-radius:18px;padding:22px;margin-top:16px;box-shadow:0 5px 18px #18315312}
+label{display:block;font-weight:700;margin:14px 0 6px}input,select{width:100%;padding:13px;border:2px solid #d0d5dd;border-radius:10px;font-size:16px}
+button{border:0;border-radius:12px;padding:13px 18px;font-weight:700;font-size:16px;cursor:pointer}
+.primary{background:var(--blue);color:white}.secondary{background:#eef2f6;color:var(--navy)}button:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btnrow button{flex:1;min-width:130px}
+.pill{display:inline-block;background:var(--yellow);color:#43320b;padding:6px 11px;border-radius:99px;font-size:13px;font-weight:800}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.progress{height:10px;background:#e4e7ec;border-radius:99px;overflow:hidden;margin:14px 0}.bar{height:100%;width:0;background:var(--blue);transition:width .25s}
+h2{margin:8px 0 12px}.question{font-size:21px;line-height:1.45;font-weight:800;margin:18px 0}
+.options{display:grid;gap:10px}.opt{display:flex;align-items:flex-start;gap:10px;text-align:left;background:#f8fafc;border:2px solid #e4e7ec;color:var(--ink);width:100%;line-height:1.35}.opt .letter{background:#dbeafe;color:#1d4ed8;border-radius:8px;padding:4px 8px;font-weight:800}.opt.selected{border-color:var(--blue);background:var(--sky)}.opt.correct{border-color:var(--green);background:#e9f8f0}.opt.wrong{border-color:var(--red);background:#fff0f0}
+.feedback{margin-top:15px;padding:14px;border-radius:12px;line-height:1.5}.feedback.good{background:#e9f8f0;border-left:5px solid var(--green)}.feedback.bad{background:#fff0f0;border-left:5px solid var(--red)}.small{font-size:13px;color:var(--muted);line-height:1.5}
+.hide{display:none!important}.scorebig{font-size:44px;font-weight:900;color:var(--blue)}.badge{display:inline-block;padding:7px 12px;border-radius:99px;background:#eaf2ff;color:#214db2;font-weight:800}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="emoji">🧪🔎</div>
+    <h1>MISI SAINS TINGKATAN 2</h1>
+    <p>Jawab 15 soalan • Kumpul mata • Jadi Juara Sains!</p>
+    <p><span class="pill">Setiap jawapan ada penerangan ringkas</span></p>
+  </header>
+
+  <section class="card" id="start">
+    <h2>🚀 Daftar peserta</h2>
+    <p>Masukkan maklumat sebenar supaya cikgu boleh menyemak penyertaan dan skor.</p>
+    <label for="studentName">Nama penuh</label>
+    <input id="studentName" maxlength="100" autocomplete="name" placeholder="Contoh: Nur Aisyah binti Ahmad" required>
+    <label for="studentClass">Kelas</label>
+    <input id="studentClass" maxlength="40" placeholder="Contoh: 2 Amanah" required>
+    <div class="btnrow"><button class="primary" id="startBtn">Mula Misi 🚀</button></div>
+    <p class="small">Jawab sendiri. Selepas memilih jawapan, baca penerangan sebelum meneruskan soalan seterusnya.</p>
+  </section>
+
+  <section class="card hide" id="game">
+    <div class="topline"><span class="badge" id="qCount">Soalan 1/15</span><span class="pill" id="scoreLabel">Skor: 0</span></div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div id="feedback" class="feedback hide" aria-live="polite"></div>
+    <div class="btnrow"><button class="secondary" id="quitBtn">Keluar</button><button class="primary" id="nextBtn" disabled>Soalan seterusnya →</button></div>
+  </section>
+
+  <section class="card hide" id="result">
+    <div style="text-align:center">
+      <div style="font-size:48px">🏆</div><h2>Misi selesai!</h2>
+      <div class="scorebig" id="finalScore">0/15</div>
+      <p id="resultMessage"></p>
+      <p><strong id="resultName"></strong> • <span id="resultClass"></span></p>
+      <span class="badge" id="percentBadge">0%</span>
+    </div>
+    <hr style="border:0;border-top:1px solid #eaecf0;margin:20px 0">
+    <h3>Semakan jawapan</h3><div id="review"></div>
+    <div class="feedback" id="saveStatus">Menghantar keputusan kepada cikgu…</div>
+    <div class="btnrow"><button class="primary" id="restartBtn">Main semula</button></div>
+    <p class="small">Jika rekod tidak dapat dihantar, ambil tangkap layar keputusan dan maklumkan kepada cikgu.</p>
+  </section>
+  <footer>Belajar sedikit demi sedikit — setiap soalan membantu kita menjadi lebih hebat.</footer>
+</div>
+<script>
+// PASTE URL Web App Google Apps Script anda di bawah untuk merekod keputusan ke Google Sheets.
+const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbworMH6Kr8bWIQX0JhySMRy7k4S6al94VfZMjwTJgKnHsNa1aCWwVffDdHzLTyFQgiZ/exec";
+
+const questions = [
+{q:"Organ deria manakah mengesan sentuhan, kesakitan dan tekanan?",o:["Mata","Hidung","Telinga","Kulit"],a:3,e:"Kulit mempunyai reseptor yang mengesan rangsangan seperti sentuhan, tekanan, suhu dan kesakitan."},
+{q:"Reseptor pada bahagian kulit yang lebih hampir dengan permukaan biasanya mengesan sentuhan. Apakah fungsi utama reseptor kulit secara umum?",o:["Mengesan rangsangan pada kulit","Menghasilkan hormon","Mencerna makanan","Mengepam darah"],a:0,e:"Reseptor kulit mengesan rangsangan seperti sentuhan, tekanan, suhu dan kesakitan lalu menghantar impuls saraf."},
+{q:"Akar tumbuh ke arah kawasan yang mempunyai air. Gerak balas tumbuhan ini dinamakan…",o:["Fototropisme","Geotropisme","Tigmotropisme","Hidrotropisme"],a:3,e:"Hidrotropisme ialah gerak balas pertumbuhan tumbuhan terhadap air. Akar biasanya tumbuh ke arah sumber air."},
+{q:"Bahagian telinga yang bergetar apabila menerima gelombang bunyi ialah…",o:["Koklea","Gegendang telinga","Saraf auditori","Tiub Eustachio"],a:1,e:"Gegendang telinga bergetar apabila gelombang bunyi sampai kepadanya. Getaran kemudian dipindahkan ke osikel."},
+{q:"Haiwan yang mempunyai mata di sisi kepala biasanya mempunyai…",o:["Medan penglihatan yang luas","Medan penglihatan bertindih yang sangat luas","Penglihatan stereoskopik yang lebih baik daripada pemangsa","Tiada medan penglihatan"],a:0,e:"Mata di sisi kepala memberikan medan penglihatan yang lebih luas untuk mengesan bahaya, tetapi kawasan bertindih biasanya lebih kecil."},
+{q:"Apakah fungsi reseptor deria?",o:["Menghasilkan makanan","Mengesan rangsangan","Mengangkut oksigen dalam darah","Menghasilkan tulang"],a:1,e:"Reseptor mengesan rangsangan tertentu dan menukarkannya kepada impuls saraf."},
+{q:"Mengapakah deria rasa seseorang yang mengalami selesema boleh menjadi kurang peka?",o:["Lidah berhenti berfungsi sepenuhnya","Deria bau terganggu dan mempengaruhi rasa makanan","Telinga tidak mengesan bunyi","Kulit tidak mengesan suhu"],a:1,e:"Deria bau membantu kita menikmati rasa makanan. Hidung tersumbat mengurangkan pengesanan bau, lalu rasa makanan terasa kurang kuat."},
+{q:"Bahagian tumbuhan yang biasanya menunjukkan fototropisme positif ialah…",o:["Akar","Pucuk","Buah","Biji benih yang kering"],a:1,e:"Fototropisme positif ialah pertumbuhan ke arah cahaya. Pucuk biasanya tumbuh ke arah sumber cahaya."},
+{q:"Jika imej objek difokuskan di belakang retina, keadaan ini biasanya dikaitkan dengan…",o:["Rabun dekat (hipermetropia)","Rabun jauh (miopia)","Buta warna","Astigmatisme sahaja"],a:0,e:"Dalam rabun dekat, imej objek dekat cenderung terbentuk di belakang retina. Kanta cembung digunakan untuk membetulkan keadaan ini."},
+{q:"Apabila cahaya bergerak dari kaca ke udara, sinar biasan biasanya membelok…",o:["Mendekati garis normal","Menjauhi garis normal","Sentiasa kembali ke dalam kaca","Tidak berubah arah dalam semua keadaan"],a:1,e:"Cahaya bergerak dari medium lebih tumpat optik (kaca) ke medium kurang tumpat optik (udara), lalu biasanya membias menjauhi garis normal."},
+{q:"Bahagian telinga yang menukarkan getaran kepada impuls saraf ialah…",o:["Cuping telinga","Salur auditori","Koklea","Tiub Eustachio"],a:2,e:"Koklea mengandungi sel deria yang menukarkan getaran bunyi kepada impuls saraf untuk dihantar ke otak melalui saraf auditori."},
+{q:"Dalam tindakan refleks, urutan laluan impuls yang betul ialah…",o:["Rangsangan → efektor → reseptor → otak","Rangsangan → reseptor → neuron deria → pusat koordinasi → neuron motor → efektor","Rangsangan → otak → reseptor → efektor","Efektor → reseptor → rangsangan"],a:1,e:"Reseptor mengesan rangsangan. Impuls bergerak melalui neuron deria ke pusat koordinasi, kemudian melalui neuron motor ke efektor."},
+{q:"Kwasyiorkor boleh berlaku apabila diet seseorang kekurangan…",o:["Protein","Air","Vitamin C sahaja","Lemak sahaja"],a:0,e:"Kwasyiorkor ialah penyakit malnutrisi yang berkaitan dengan kekurangan protein dalam diet."},
+{q:"Antara ciri berikut, yang manakah biasanya terdapat pada tumbuhan dikotiledon?",o:["Daun berurat selari","Akar serabut","Biji mempunyai satu kotiledon","Daun berurat jejala"],a:3,e:"Tumbuhan dikotiledon biasanya mempunyai dua kotiledon dan daun berurat jejala. Tumbuhan monokotiledon biasanya berurat selari."},
+{q:"Nilai kalori nasi ialah 15 kJ/g. Berapakah tenaga yang dibekalkan oleh 100 g nasi?",o:["15 kJ","150 kJ","1 500 kJ","3 000 kJ"],a:2,e:"Tenaga = nilai kalori × jisim = 15 kJ/g × 100 g = 1 500 kJ."}
+];
+let index=0, score=0, answers=[], locked=false, startedAt=null;
+const $=id=>document.getElementById(id);
+$("startBtn").addEventListener("click",()=>{
+ const n=$("studentName").value.trim(), c=$("studentClass").value.trim();
+ if(!n||!c){alert("Sila isi nama penuh dan kelas dahulu.");return}
+ sessionStorage.setItem("misiName",n);sessionStorage.setItem("misiClass",c);
+ $("start").classList.add("hide");$("game").classList.remove("hide");
+ startedAt=new Date().toISOString();renderQuestion();
+});
+function renderQuestion(){
+ locked=false;$("nextBtn").disabled=true;$("feedback").className="feedback hide";$("options").innerHTML="";
+ const q=questions[index];$("qCount").textContent=`Soalan ${index+1}/${questions.length}`;$("scoreLabel").textContent=`Skor: ${score}`;$("bar").style.width=`${index/questions.length*100}%`;$("question").textContent=q.q;
+ q.o.forEach((opt,i)=>{const b=document.createElement("button");b.className="opt";b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${opt}</span>`;b.addEventListener("click",()=>choose(i,b));$("options").appendChild(b)});
+ $("nextBtn").textContent=index===questions.length-1?"Lihat keputusan 🏆":"Soalan seterusnya →";
+}
+function choose(i,btn){
+ if(locked)return;locked=true;const q=questions[index],correct=i===q.a;if(correct)score++;
+ answers.push({question:index+1,selected:String.fromCharCode(65+i),correct:String.fromCharCode(65+q.a),isCorrect:correct});
+ [...$("options").children].forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add("correct");if(j===i&&!correct)b.classList.add("wrong")});
+ const f=$("feedback");f.className="feedback "+(correct?"good":"bad");f.innerHTML=`<strong>${correct?"✅ Betul! +1 mata":"💡 Belum tepat"}</strong><br>Jawapan: <strong>${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</strong><br>${q.e}`;
+ $("scoreLabel").textContent=`Skor: ${score}`;$("nextBtn").disabled=false;
+}
+$("nextBtn").addEventListener("click",()=>{if(index<questions.length-1){index++;renderQuestion()}else finish()});
+$("quitBtn").addEventListener("click",()=>{if(confirm("Keluar sekarang? Kemajuan dan keputusan mungkin tidak direkodkan.")){location.reload()}});
+$("restartBtn").addEventListener("click",()=>location.reload());
+function finish(){
+ $("game").classList.add("hide");$("result").classList.remove("hide");$("bar").style.width="100%";
+ const n=sessionStorage.getItem("misiName"),c=sessionStorage.getItem("misiClass"),pct=Math.round(score/questions.length*100);
+ $("finalScore").textContent=`${score}/${questions.length}`;$("resultName").textContent=n;$("resultClass").textContent=c;$("percentBadge").textContent=`${pct}%`;
+ $("resultMessage").textContent=pct>=80?"Hebat! Teruskan usaha dan cabar diri dengan topik lain.":pct>=50?"Bagus kerana sudah mencuba. Baca semula penerangan untuk kukuhkan kefahaman.":"Teruskan berlatih. Kesilapan ialah peluang untuk belajar!";
+ $("review").innerHTML=questions.map((q,i)=>`<div style="padding:10px 0;border-bottom:1px solid #eaecf0"><strong>${i+1}. ${q.q}</strong><div class="small">Jawapan betul: ${String.fromCharCode(65+q.a)}. ${q.o[q.a]} • ${answers[i]?.isCorrect?"Betul":"Belum tepat"}</div></div>`).join("");
+ sendResult({name:n,className:c,score,total:questions.length,percentage:pct,startedAt,finishedAt:new Date().toISOString(),answers:answers.map(a=>({question:a.question,selected:a.selected,correct:a.correct,isCorrect:a.isCorrect}))});
+}
+function sendResult(data){
+ const status=$("saveStatus");
+ if(!GOOGLE_SHEETS_WEB_APP_URL.startsWith("https://script.google.com/")){status.className="feedback bad";status.textContent="Permainan selesai, tetapi pautan Google Sheets belum dipasang. Skor dipaparkan di skrin sahaja.";return}
+ status.textContent="Keputusan sedang dihantar kepada cikgu…";
+ fetch(GOOGLE_SHEETS_WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)})
+ .then(()=>{status.className="feedback good";status.textContent="Permintaan rekod telah dihantar. Cikgu boleh menyemak rekod dalam Google Sheets. Jika rekod belum muncul, maklumkan kepada cikgu."})
+ .catch(()=>{status.className="feedback bad";status.textContent="Rekod tidak dapat dihantar. Ambil tangkap layar keputusan dan maklumkan kepada cikgu."});
+}
+</script>
+</body>
+</html>
